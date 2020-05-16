@@ -4,14 +4,13 @@ using namespace std;
 int main(void){
     int i;
     string input;
-    string s_number = "";
+    int number = 0;
     getline(cin,input);
     for(i=0;i<input.length();i++){
         if(isdigit(input[i])){
-            s_number += input[i];
+            number = number*10 + (input[i]-'0');
         }
     }
-    int number = stoi(s_number);
     int answer = 0;
     for(i=1;i<=number;i++){
         if(number%i==0) answer++;
