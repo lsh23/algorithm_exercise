@@ -20,6 +20,7 @@ int main(void){
 	while(!q.empty()){
 		int position = q.front();
 		q.pop();
+		// if(position<=0 || position>10000) continue; 이런거 잘처리해야함
 		if(position==e){
 			answer = dist[position];
 			break;
