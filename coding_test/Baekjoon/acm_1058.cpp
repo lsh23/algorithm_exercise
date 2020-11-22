@@ -1,53 +1,43 @@
-#include<bits/stdc++.h>
+#include<vector>
+#include<algorithm>
+#include<iostream>
 using namespace std;
 
-
-void DFS(int i,vector<int> &visited, vector<vector<int>> friend_info,int n,set<int> &s){
-
-    for(int k=0;k<n;k++){
-        if(friend_info[i][k] && visited[k]==0){
-            visited[k] = 1;
-            s.insert(k);
-            DFS(k,visited,friend_info,n,s);
-            visited[k] = 0;
-        }
-    }
-
-}
 
 int main(void){
 
     int n;
     cin >> n;
-
-    vector<vector<int>> friend_info(n,vector<int>(n,0));
-
+    vector<vector<int>> graph(n,vector<int>(n,0));
+    int answer = 0;
+    
     for(int i=0;i<n;i++){
         for(int j=0;j<n;j++){
-            char info;
-            cin >> info;
-            if(info=='N') friend_info[i][j] = 0;
-            else friend_info[i][j] = 1;
+            char input;
+            cin >> input;
+            if(input=='N') graph[i][j] = INT32_MAX;
+            else graph[i][j] = 1;
+            if(i==j) graph[i][j] = 0;
         }
     }
 
-    // 2-친구
-    // 그냥 서로 친구인 경우
-    // 중간 친구가 있는 경우 
-
-    // 각 개인에 대해서 DFS해서 길이 구하면 됨
-    int answer = 0;
+    for(int k=0;k<n;k++){
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(graph[i][k] != INT32_MAX && graph[k][j] != INT32_MAX) graph[i][j] = min(graph[i][j],graph[i][k] + graph[k][j]);
+            }
+        }
+    }
 
     for(int i=0;i<n;i++){
-        vector<int> visited(n,0);
-        visited[i]=1;
-        set<int> s;
-        DFS(i,visited,friend_info,n,s);
-        
-        answer = answer > s.size() ? answer : s.size();
+        int cnt = 0;
+        for(int j=0;j<n;j++){
+            if(i==j)continue;
+            if(graph[i][j]<=2)cnt++;
+        }
+        answer = answer > cnt ? answer : cnt;
     }
 
     cout << answer;
-
     return 0;
 }
