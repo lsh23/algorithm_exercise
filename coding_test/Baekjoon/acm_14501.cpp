@@ -1,11 +1,7 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<vector>
+#include<algorithm>
 using namespace std;
-
-struct p_s_max{
-	bool operator()(pair<int,int> a,pair<int,int> b){
-		return a.second < b.second;
-	}
-};
 
 int main(void){
 
@@ -20,20 +16,19 @@ int main(void){
     }
 
     int answer = 0;
+    vector<int> cost(n+2,0);
+
     for(int i=1;i<=n;i++){
-        int day = i;
-        int sum = 0;
-        priority_queue<pair<int,int>,vector<pair<int,int>>,p_s_max> p_q(v.begin()+i,v.end());
-        while(true){
-            if(day>n) break;
-            int next_day = day + v[day].first;
-            if(next_day>n+1) break;
-            sum += v[day].second;
-            day=next_day;
+        int t_i = v[i].first;
+        int p_i = v[i].second;
+        for(int j=i+t_i;j<=n+1;j++){
+            cost[j] = max(cost[j],cost[i]+p_i);
         }
-        answer = answer > sum ? answer : sum;
     }
 
+    answer = *max_element(cost.begin(),cost.end());
+
     cout << answer;
+
     return 0;
 }
